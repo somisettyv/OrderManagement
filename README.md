@@ -46,26 +46,80 @@ Few Implementation Notes:
 Add the following DB Driver details in Application.properties 
 
         server.port=9093
-# create and drop tables and sequences, loads import.sql
-spring.jpa.hibernate.ddl-auto=update
-#spring.datasource.username=sa
-#spring.datasource.password=
-#spring.datasource.name=test
-#spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.initialize=false
-#spring.datasource.url=jdbc:h2:file:~/test;DB_CLOSE_ON_EXIT=FALSE;IFEXISTS=TRUE;DB_CLOSE_DELAY=-1;
-spring.datasource.url=jdbc:postgresql://localhost:5432/somisettyv
-spring.datasource.username=somisettyv
-spring.datasource.password=
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
-# logging
-logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
-logging.level.org.hibernate.SQL=debug
+    # create and drop tables and sequences, loads import.sql
+    spring.jpa.hibernate.ddl-auto=update
+    #spring.datasource.username=sa
+    #spring.datasource.password=
+    #spring.datasource.name=test
+    #spring.datasource.driverClassName=org.h2.Driver
+    spring.datasource.initialize=false
+    #spring.datasource.url=jdbc:h2:file:~/test;DB_CLOSE_ON_EXIT=FALSE;IFEXISTS=TRUE;DB_CLOSE_DELAY=-1;
+    spring.datasource.url=jdbc:postgresql://localhost:5432/somisettyv
+    spring.datasource.username=somisettyv
+    spring.datasource.password=
+    spring.datasource.driver-class-name=org.postgresql.Driver
+    spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+    spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+    # logging
+    logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+    logging.level.org.hibernate.SQL=debug
 
 
 DAO Layer :
 
     Created the Custom Query-Builder to create the queries dynamically and which could be executed by JDBC templates
+
+Customer Order API :
+
+Request: Generic Request with Filters and Pagination
+
+        {
+            "pagination": {
+                "pageNo": 1,
+                "pageSize": 10
+            },
+            "filters": {
+                "customerId": "1",
+                "orderStartDate": "2023-06-03",
+                "orderEndDate": "2023-06-30"
+            }
+        }
+
+Response :
+
+Get data from both the Order and Order-History table
+
+    {
+        "pageCount": 3,
+        "data": [
+            {
+                "custId": 1,
+                "custName": "Venky",
+                "orderId": 2,
+                "orderDate": "2023-06-03",
+                "status": "COMPLETED",
+                "orderAmt": 1100.0
+            },
+            {
+                "custId": 1,
+                "custName": "Venky",
+                "orderId": 1,
+                "orderDate": "2023-06-05",
+                "status": "COMPLETED",
+                "orderAmt": 1200.0
+            },
+            {
+                "custId": 1,
+                "custName": "Venky",
+                "orderId": 1,
+                "orderDate": "2023-06-27",
+                "status": "NEW",
+                "orderAmt": 1000.0
+            }
+        ]
+    }
+
+
+
+
 
