@@ -1,4 +1,5 @@
-# spring-boot-jpa-h2
+# OrderManagement
+
 
 This Repo to demonstrate how to use the Spring Hibernate JPA works within Spring 4. This sample repo has few very simple 
 UseCases such as adding new Employees to a deportment, retrieving all Employees from a given Department.
@@ -18,15 +19,12 @@ operations.
     
 How to run :
 
-H2 DB Set up :
+Install Postgres
 
-    Download H2 DB from http://www.h2database.com/html/download.html
-    
-    Install H2 : 
-    
-    Start H2  :
-    
-    /Applications/AllMyProjects/h2/bin/h2.sh
+Create the following tables
+Customer
+Order
+OrderHistory
     
  Install Grandle 
  
@@ -47,36 +45,27 @@ Few Implementation Notes:
 
 Add the following DB Driver details in Application.properties 
 
-             server.port=9093
-
-            # create and drop tables and sequences, loads import.sql
-            spring.jpa.hibernate.ddl-auto=update
-
-
-            spring.datasource.username=
-            spring.datasource.password=
-
-            spring.datasource.name=test
-            spring.datasource.driverClassName=org.h2.Driver
-
-            spring.datasource.initialize=false
-            spring.datasource.url=jdbc:h2:file:~/test;DB_CLOSE_ON_EXIT=FALSE;IFEXISTS=TRUE;DB_CLOSE_DELAY=-1;
-
-            spring.jpa.hibernate.ddl-auto = update
+        server.port=9093
+# create and drop tables and sequences, loads import.sql
+spring.jpa.hibernate.ddl-auto=update
+#spring.datasource.username=sa
+#spring.datasource.password=
+#spring.datasource.name=test
+#spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.initialize=false
+#spring.datasource.url=jdbc:h2:file:~/test;DB_CLOSE_ON_EXIT=FALSE;IFEXISTS=TRUE;DB_CLOSE_DELAY=-1;
+spring.datasource.url=jdbc:postgresql://localhost:5432/somisettyv
+spring.datasource.username=somisettyv
+spring.datasource.password=
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+# logging
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+logging.level.org.hibernate.SQL=debug
 
 
 DAO Layer :
 
-     public interface DepartmentRepository extends CrudRepository<Department, Long>
-     
-     One to Many  : Department to Employee 
-     
-          @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "department")
-      	  List<Employee> employees;
-          
-     Many to One   : 
-         
-         	@ManyToOne(fetch = FetchType.LAZY)
-             @JoinColumn(name = "depno", nullable = false)
-	        Department department;
+    Created the Custom Query-Builder to create the queries dynamically and which could be executed by JDBC templates
 
