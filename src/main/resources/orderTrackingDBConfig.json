@@ -1,0 +1,19 @@
+[
+  {
+    "configurationName": "Get_Order_Summary",
+    "query":"SELECT cust_id, cust_name, O.order_id, O.customer_id, O.enddate, O.status, O.order_amount, O.orderdate FROM public.customer_order O INNER JOIN public.\"Customer\" C ON O.customer_id= C.cust_id where O.customer_id = <CUSTOMER_ID> and O.orderdate >= '<START_DATE>' and O.orderdate <='<END_DATE>' \n\tUNION\n\tSELECT cust_id, cust_name, H.order_id, H.customer_id, H.enddate, H.status, H.order_amount, H.orderdate\n\tFROM public.customer_order_history H INNER JOIN public.\"Customer\" C ON H.customer_id= C.cust_id where \n\tH.customer_id = <CUSTOMER_ID> and H.orderdate >= '<START_DATE>' and H.orderdate <='<END_DATE>'",
+    "inputParamMapping": {
+      "<CUSTOMER_ID>": "customerId",
+      "<START_DATE>": "orderStartDate",
+      "<END_DATE>": "orderEndDate"
+    },
+    "outputParamMapping": {
+      "cust_id":"custId",
+      "cust_name":"custName",
+      "order_id":"orderId",
+      "status":"status",
+      "order_amount":"orderAmt",
+      "orderdate":"orderDate"
+    }
+  }
+]
